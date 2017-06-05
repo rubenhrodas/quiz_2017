@@ -18,6 +18,7 @@ router.get('/help', function(req, res, next) {
 });
 
 
+
 // Autoload de rutas que usen :quizId
 router.param('quizId', quizController.load);
 
@@ -33,6 +34,5 @@ router.delete('/quizzes/:quizId(\\d+)',    quizController.destroy);
 
 router.get('/quizzes/:quizId(\\d+)/play',  quizController.play);
 router.get('/quizzes/:quizId(\\d+)/check', quizController.check);
-
 
 module.exports = router;
