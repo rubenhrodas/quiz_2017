@@ -187,3 +187,62 @@ exports.check = function (req, res, next) {
         answer: answer
     });
 };
+
+var score = 0;
+// GET /quizzes/randomplay
+exports.randomplay = function (req, res, next) {
+
+    if(!req.session.score) req.session.score = 0;
+    if(req.session.score === 0) req.session.yhc = [-1];
+
+   var answer = req.query.answer || '';
+
+    models.Quiz.count({where:{
+            id:{$notIn: req.session.yhc}
+            }})
+    .then(function(c){
+        al = Math.floor(Math.random() * (c - 0)  + 0);
+        return models.Quiz.findAll({where: 
+            { id: {$notIn: req.session.yhc}
+        }})
+        .then(function(quiz){
+        preg = quiz[al];
+        req.session.yhc.push(preg.id);
+        res.render('quizzes/random_play',{
+            quiz: preg,
+            answer: answer,
+            score: req.session.score
+        });});});
+    };
+
+// GET /quizzes/randomcheck/:quizId
+exports.randomcheck = function (req, res, next) {
+
+    var answer = req.query.answer || "";
+    var result = answer.toLowerCase().trim() === req.quiz.answer.toLowerCase().trim();
+
+    if(result){
+        req.session.score = req.session.score + 1;}
+        else{
+            req.session.score=0;
+            req.session.yhc=[-1];
+        }
+
+    models.Quiz.count()
+    .then(function(c){
+        if(req.session.score === c){
+            req.session.yhc=[-1];
+            req.session.score=0;
+            res.render('quizzes/random_nomore', {
+                score: req.session.score});
+            }
+        else{
+            res.render('quizzes/random_results', {
+                quiz: req.quiz,
+                result: result,
+                score: req.session.score,
+                answer: answer});
+                }
+            });
+    };
+
