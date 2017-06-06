@@ -189,7 +189,7 @@ exports.check = function (req, res, next) {
 };
 
 var score = 0;
-// GET /quizzes/randomplay
+// GET /quizzes/randomplay -----------> practica52
 exports.randomplay = function (req, res, next) {
 
     if(!req.session.score) req.session.score = 0;

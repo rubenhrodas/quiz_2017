@@ -35,4 +35,7 @@ router.delete('/quizzes/:quizId(\\d+)',    quizController.destroy);
 router.get('/quizzes/:quizId(\\d+)/play',  quizController.play);
 router.get('/quizzes/:quizId(\\d+)/check', quizController.check);
 
+//practica52
+router.get('/quizzes/randomplay', quizController.randomplay);
+
 module.exports = router;
